@@ -16,13 +16,11 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// Config はアプリケーション設定を保持
 type Config struct {
 	Database DatabaseConfig
 	Server   ServerConfig
 }
 
-// DatabaseConfig はデータベース設定
 type DatabaseConfig struct {
 	Host     string
 	Port     string
@@ -32,7 +30,6 @@ type DatabaseConfig struct {
 	SSLMode  string
 }
 
-// ServerConfig はサーバー設定
 type ServerConfig struct {
 	Port string
 }
@@ -43,20 +40,17 @@ var (
 	config    *Config
 )
 
-// initConfig は設定ファイルをロード
 func initConfig() {
 	viper.SetConfigName(".env")
 	viper.SetConfigType("dotenv")
 	viper.AddConfigPath(".")
-	viper.AutomaticEnv() // 環境変数を自動的に読み込む
+	viper.AutomaticEnv()
 
-	// デフォルト値を設定
 	viper.SetDefault("DB_HOST", "localhost")
 	viper.SetDefault("DB_PORT", "5432")
 	viper.SetDefault("DB_SSLMODE", "disable")
 	viper.SetDefault("SERVER_PORT", "8080")
 
-	// 設定ファイルをロード（存在しなくてもエラーにしない）
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			log.Printf("Warning: Error reading config file: %v", err)
@@ -67,7 +61,6 @@ func initConfig() {
 		log.Printf("Loaded config from: %s", viper.ConfigFileUsed())
 	}
 
-	// 設定を構造体にマッピング（大文字のキーを使用）
 	config = &Config{
 		Database: DatabaseConfig{
 			Host:     viper.GetString("DB_HOST"),
@@ -82,7 +75,7 @@ func initConfig() {
 		},
 	}
 
-	// パスワードが設定されているか確認
+	// パスワードが設定されていなかったらエラーにする
 	if config.Database.Password == "" {
 		log.Fatalf("Database password is not set. Please set DB_PASSWORD in .env file or environment variable.")
 	}
@@ -95,7 +88,6 @@ func initConfig() {
 	)
 }
 
-// initDB はデータベース接続を初期化
 func initDB() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		config.Database.Host,
@@ -117,7 +109,6 @@ func initDB() {
 	log.Println("Database connected successfully")
 }
 
-// initRepository はRepositoryを初期化
 func initRepository() {
 	orderRepo = repository.NewOrderRepository(db)
 	log.Println("Repository initialized successfully")
