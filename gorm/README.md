@@ -6,9 +6,9 @@ GormとはGolang用のORM
 
 # Requirement
 
-# Use
-
+- mise
 - Docker (PostgreSQLサーバを起動するのに必要/ローカルに直接ホストしている人とかは不要)
+  - PostgreSQL v18(v14以降だったら動くはず...！)
 - Gin(Web Framework)
 - Gorm(ORMapper)
 
