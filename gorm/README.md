@@ -112,3 +112,9 @@ curl -w "%{http_code}\n" -o /dev/null -s "http://localhost:8080/users/100/orders
 # ヘッダー情報も含めて表示
 curl -i "http://localhost:8080/users/100/orders"
 ```
+
+削除
+
+```shell
+curl -XDELETE "http://localhost:8080/orders/2"
+```
