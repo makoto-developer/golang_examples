@@ -14,3 +14,7 @@ go run worker.go
 # 何度も実行させてみるとshell 1とshell 2でそれぞれメッセージが届いていることがわかる
 go run new_task.go
 ```
+
+## References
+
+- https://www.rabbitmq.com/tutorials/tutorial-two-go
