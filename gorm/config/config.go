@@ -29,6 +29,8 @@ func LoadConfig() *Config {
 	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
 
+	// 本当ならdefault値を設定するがこのサンプルでは実装しない
+
 	if err := viper.ReadInConfig(); err != nil {
 		log.Printf("Warning: could not read .env file (%v). Using environment variables.", err)
 	} else {

@@ -16,42 +16,44 @@ type OrderHandler struct {
 }
 
 func NewOrderHandler(repo repository.OrderRepository) *OrderHandler {
-	return &OrderHandler{repo: repo}
+	return &OrderHandler{
+		repo: repo,
+	}
 }
 
 func (h *OrderHandler) GetOrders(c *gin.Context) {
 	ids := c.Query("ids")
 
-	if ids != "" {
-		var orderIDs []uint64
-		idStrings := strings.Split(ids, ",")
-
-		for _, idStr := range idStrings {
-			id, err := strconv.ParseUint(strings.TrimSpace(idStr), 10, 64)
-			if err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": fmt.Sprintf("Invalid ID format: %s", idStr),
-				})
-				return
-			}
-			orderIDs = append(orderIDs, id)
-		}
-
-		orders, err := h.repo.ListByOrderID(orderIDs)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-
-		c.JSON(http.StatusOK, orders)
+	if ids == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Use ?ids=1,2,3 to get specific orders",
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Use ?ids=1,2,3 to get specific orders",
-	})
+	var orderIDs []uint64
+	idStrings := strings.Split(ids, ",")
+
+	for _, idStr := range idStrings {
+		id, err := strconv.ParseUint(strings.TrimSpace(idStr), 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": fmt.Sprintf("Invalid ID format: %s", idStr),
+			})
+			return
+		}
+		orderIDs = append(orderIDs, id)
+	}
+
+	orders, err := h.repo.ListByOrderID(orderIDs)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, orders)
 }
 
 func (h *OrderHandler) GetOrder(c *gin.Context) {
