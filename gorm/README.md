@@ -22,6 +22,23 @@ git clone https://github.com/makoto-developer/docker-templates.git
 cd docker-templates/postgresql-single-server/
 docker compose up -d
 
+# データベース作成
+
+`0x_sample.sql`があるのでスキーマとテーブルを作る
+
+```shell
+docker exec -i psql_single_server18 psql -U root -d postgres < 01_create_db.sql
+```
+
+```shell
+docker exec -i psql_single_server18 psql -U psql_user -d myshop < 02_sample.sql
+```
+
+```shell
+docker exec -i psql_single_server18 psql -U psql_user -d myshop < 03_sample.sql
+```
+
+
 # Goをインストール
 mise i
 
