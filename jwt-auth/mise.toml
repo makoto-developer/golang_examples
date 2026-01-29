@@ -1,0 +1,24 @@
+[tools]
+go = "1.23"
+
+[tasks.server]
+description = "Run JWT auth server"
+run = "go run main.go"
+
+[tasks.test]
+description = "Run tests"
+run = "go test ./..."
+
+[tasks.mod]
+description = "Download dependencies"
+run = "go mod tidy"
+
+[tasks.init]
+description = "Initialize project"
+run = [
+  "go mod init github.com/makoto-developer/golang_examples/jwt-auth",
+  "go get github.com/gin-gonic/gin",
+  "go get github.com/golang-jwt/jwt/v5",
+  "go get golang.org/x/crypto/bcrypt",
+  "go get github.com/joho/godotenv"
+]
